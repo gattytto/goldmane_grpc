@@ -1,0 +1,11 @@
+# To make proto_library rules to include source info in the descriptor
+#build --remote_cache=http://10.0.1.210:9080
+build --protocopt=--include_source_info
+build --sandbox_debug
+build --verbose_failures
+build --color=yes
+build --jobs=2
+#change jobs to cores
+build --java_runtime_version=remotejdk_11
+build --action_env=BAZEL_CXXOPTS="-std=c++20"
+#startup --host_jvm_args=-Djava.net.preferIPv6Addresses=true <-enable for ipv6 only environment
