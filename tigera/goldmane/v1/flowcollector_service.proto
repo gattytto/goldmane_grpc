@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package tigera.goldmane.v1;
+
+import "tigera/goldmane/v1/goldmane.proto";
+import "google/api/client.proto";
+
+option csharp_namespace = "Goldmane";
+option go_package = "tigera.golang.org/genproto/goldmane/v1;goldmane";
+option java_multiple_files = true;
+option java_outer_classname = "Goldmane";
+option java_package = "com.goldmane.v1"; 
+option objc_class_prefix = "GMN";
+option php_namespace = "Goldmane";
+option ruby_package = "Goldmane";
+
+// FlowCollector provides APIs capable of receiving streams of Flow data from cluster nodes.
+service FlowCollector {
+  option (google.api.default_host) = "cloud.tigera.io";
+  // Connect receives a connection that may stream one or more FlowUpdates. A FlowReceipt is returned
+  // to the client by the server after each FlowUpdate.
+  //
+  // Following a connection or reconnection to the server, clients should duplicates of previously transmitted FlowsUpdates
+  // in order to allow the server to rebuild its cache, as well as any new FlowUpdates that have not previously been transmitted.
+  // The server is responsible for deduplicating where needed.
+  rpc Connect(stream FlowUpdate) returns (stream FlowReceipt);
+}
+
+// FlowReceipt is a response from the server to a client after publishing a Flow.
+message FlowReceipt {}
+
+// FlowUpdate wraps a Flow with additional metadata.
+message FlowUpdate {
+  // Flow contains the actual flow being sent.
+  Flow flow = 1;
+}

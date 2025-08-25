@@ -1,0 +1,6 @@
+core.*
+bazel-*/**
+bazel-*
+google/**
+./google
+bazel-goldmane_grpc

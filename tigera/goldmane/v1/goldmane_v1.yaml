@@ -1,0 +1,23 @@
+type: google.api.Service
+config_version: 3
+name: goldmane
+title: tigera flows api 
+
+apis:
+- name: goldmane.Flows
+- name: goldmane.Statistics
+- name: goldmane.FlowCollector
+
+documentation:
+  summary: packs flow logs
+  rules:
+  - selector: goldmane.Flows.List
+    description: List is an API call to query for one or more Flows.
+  - selector: goldmane.Flows.Stream
+    description:  API call to return a long running stream of new Flows as they are generated.
+  - selector: goldmane.Flows.FilterHints
+    description: discover available filter criteria.
+  - selector: goldmane.Statistics.List
+    description: returns statistics data for the given request.
+  - selector: goldmane.FlowCollector.Connect
+    description: receives a connection that may stream one or more FlowUpdates

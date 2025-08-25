@@ -1,0 +1,15 @@
+meta
+bazel-*/**
+bazel-*
+meta
+venv*
+**/__pycache__
+src/**
+.mypy_cache
+__pycache__
+.metals
+MODULE.bazel.*
+MODULE.bazel
+tigera/**/BUILD.bazel
+*.pem
+*.key
