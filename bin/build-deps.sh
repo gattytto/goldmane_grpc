@@ -152,7 +152,7 @@ PATH=bin/:$PATH bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             --plugin=protoc-gen-scala=bin/protoc-gen-scala
 
 #####################
-#PYTHON-SNAPSHOT+CEX
+#PYTHON
 #####################
 mkdir -p src/python/code src/python/stubs
 bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
@@ -166,7 +166,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             --plugin=protoc-gen-grpc_python=bin/grpc_python_plugin
             
 #####################
-#CSHARP-SNAPSHOT+CEX
+#CSHARP
 #####################
 mkdir -p src/csharp/code
 bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
@@ -179,7 +179,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             --plugin=protoc-gen-grpc_csharp=bin/protoc-gen-grpc_csharp
 
 #####################
-#GRPC-WEB-SNAPSHOT+CEX+OAUTH
+#GRPC-WEB
 #####################
 #
 mkdir -p src/js
