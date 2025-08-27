@@ -86,6 +86,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
             --java_out=src/java/stubs \
             --kotlin_out=src/kotlin/stubs \
             --plugin=protoc-gen-grpckt=bin/kotlin-grpc.sh \
@@ -94,7 +95,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             --grpc-java_out=src/java
 
 #####################
-#GO-OAUTH
+#GO
 #####################
 mkdir -p src/go/stubs
 
@@ -103,6 +104,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
            --go_out=src/go/stubs \
            --go_opt=paths=source_relative \
            --go-grpc_out=src/go/stubs \
@@ -120,6 +122,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
             --grpc_out=generate_server:src/php/stubs \
             --php_out=src/php/stubs \
             --plugin=protoc-gen-grpc=bin/grpc_php_plugin
@@ -133,6 +136,7 @@ PATH=bin/dart-sdk/bin:$PATH bin/protoc -I=bazel-${PWD##*/}/external/com_google_g
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
             --dart_out=grpc:src/dart \
             --plugin=protoc-gen-dart=$HOME/.pub-cache/bin/protoc-gen-dart
 
@@ -148,6 +152,7 @@ PATH=bin/:$PATH bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
             --scala_out=grpc:src/scala/src/main/scala/ \
             --plugin=protoc-gen-scala=bin/protoc-gen-scala
 
@@ -160,6 +165,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
             --grpc_python_out=src/python/code \
             --python_out=src/python/code \
             --pyi_out=src/python/stubs \
@@ -174,6 +180,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
             --csharp_out=src/csharp/code \
             --grpc_csharp_out=src/csharp/code \
             --plugin=protoc-gen-grpc_csharp=bin/protoc-gen-grpc_csharp
@@ -188,6 +195,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/flows_service.proto \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
+            tigera/goldmane/v1/goldmane.proto \
             --js_out=import_style=commonjs:src/js \
             --grpc-web_out=import_style=commonjs,mode=grpcwebtext:src/js \
             --plugin=protoc-gen-grpc-web=bin/protoc-gen-grpc-web \
