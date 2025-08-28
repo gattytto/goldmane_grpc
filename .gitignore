@@ -13,3 +13,4 @@ MODULE.bazel
 tigera/**/BUILD.bazel
 *.pem
 *.key
+.vscode
