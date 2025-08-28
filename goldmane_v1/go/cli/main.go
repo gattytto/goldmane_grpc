@@ -1,9 +1,12 @@
-package goldmane_cli
+package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	goldmane "goldmane.golang.com/gapic/cloud.tigera.io/tigera/goldmane/v1"
@@ -20,9 +23,28 @@ func main() {
 	endpoint := GOLDMANE_SERVICE + ":7443"
 	ctx := context.Background()
 
-	// Enable SSL (system CAs), no auth
-	tlsCreds := credentials.NewClientTLSFromCert(nil, "")
+	// 1. Load Certificates
+	clientCert, err := tls.LoadX509KeyPair("../../bundle.pem", "../../goldmane.key")
+	if err != nil {
+		log.Fatalf("failed to load client key pair: %v", err)
+	}
 
+	caCert, err := os.ReadFile("../../bundle.pem")
+	if err != nil {
+		log.Fatalf("failed to read CA certificate: %v", err)
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	// 2. Create TLS Configuration
+	tlsConfig := &tls.Config{
+		Certificates: []tls.Certificate{clientCert},
+		RootCAs:      caCertPool,
+		// Optional: InsecureSkipVerify: true, for development, but not recommended for production
+	}
+
+	// Enable SSL (system CAs), no auth
+	tlsCreds := credentials.NewTLS(tlsConfig)
 	client, err := goldmane.NewFlowsClient(ctx, option.WithoutAuthentication(),
 		option.WithEndpoint(endpoint),
 		option.WithGRPCDialOption(grpc.WithTransportCredentials(tlsCreds)),
@@ -30,9 +52,8 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
+		defer client.Close()
 	}
-
-	defer client.Close()
 
 	// Default (empty) request
 	req := &goldmanepb.FlowStreamRequest{}
