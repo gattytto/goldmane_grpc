@@ -97,7 +97,7 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
 #####################
 #GO
 #####################
-mkdir -p src/go/stubs
+mkdir -p src/go/gapic
 
 bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
            -I . -I=tigera/goldmane/v1/ \
@@ -105,15 +105,16 @@ bin/protoc -I=bazel-${PWD##*/}/external/com_google_googleapis \
             tigera/goldmane/v1/statistics_service.proto \
             tigera/goldmane/v1/flowcollector_service.proto \
             tigera/goldmane/v1/goldmane.proto \
-           --go_out=src/go/stubs \
+           --go_out=src/go \
            --go_opt=paths=source_relative \
-           --go-grpc_out=src/go/stubs \
+           --go-grpc_out=src/go \
            --go_opt=paths=source_relative \
+           --go-grpc_opt=paths=source_relative \
            --plugin=protoc-gen-go=bin/protoc-gen-go \
            --plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc
 
 #####################
-#PHP-OAUTH
+#PHP
 #####################
 mkdir -p src/php/stubs
 

@@ -3,7 +3,7 @@ syntax = "proto3";
 package tigera.goldmane.v1;
 
 option csharp_namespace = "Goldmane";
-option go_package = "tigera.golang.org/genproto/goldmane/v1;goldmane";
+option go_package = "goldmane.golang.com/tigera/goldmane/v1;goldmanepb";
 option java_multiple_files = true;
 option java_outer_classname = "Goldmane";
 option java_package = "com.goldmane"; 
