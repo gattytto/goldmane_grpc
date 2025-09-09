@@ -26,18 +26,18 @@ logging.getLogger('elasticsearch').setLevel(logging.ERROR)
 # Alternatively, to completely suppress all warnings from these loggers:
 # logging.getLogger('elastic_transport.transport').setLevel(logging.CRITICAL)
 # logging.getLogger('elasticsearch').setLevel(logging.CRITICAL)
-
+import os
 es = Elasticsearch(
     hosts=["https://elasticsearch-sample-es-http.elastic-system.svc:9200"],  # Update with your ES host
-    basic_auth=("elastic", "REDACTED"),  # Update with your user and password
+    basic_auth=("elastic", os.getenv('ES_PASSWORD')),  # Update with your user and password
     verify_certs=False,
     ssl_show_warn=False
 )
 
 GOLDMANE_SERVICE="goldmane.calico-system.svc"
-import os
-kk=open(os.getcwd()+'/goldmane.key', 'rb').read()
-bd=open(os.getcwd()+'/bundle.pem', 'rb').read()
+
+kk=open(os.getenv(SSL_KEY_PATH)).read()
+bd=open(os.getenv(SSL_CERT_PATH)).read()
 creds = ssl_channel_credentials(bd,kk,bd)
 
 async def statistics_stream():

@@ -3,6 +3,7 @@ module goldmane.golang.com
 go 1.24.2
 
 require (
+	github.com/elastic/go-elasticsearch/v8 v8.19.0
 	github.com/googleapis/gax-go/v2 v2.15.0
 	google.golang.org/api v0.248.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250826171959-ef028d996bc1
@@ -14,6 +15,7 @@ require (
 	cloud.google.com/go/auth v0.16.5 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.8.0 // indirect
+	github.com/elastic/elastic-transport-go/v8 v8.7.0 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect

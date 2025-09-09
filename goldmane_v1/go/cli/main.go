@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	goldmane "goldmane.golang.com/gapic/cloud.tigera.io/tigera/goldmane/v1"
 	goldmanepb "goldmane.golang.com/tigera/goldmane/v1"
@@ -29,27 +28,25 @@ func main() {
 		log.Fatalf("failed to load client key pair: %v", err)
 	}
 
-	caCert, err := os.ReadFile("../../bundle.pem")
+	cert, err := os.ReadFile("../../bundle.pem")
 	if err != nil {
 		log.Fatalf("failed to read CA certificate: %v", err)
 	}
-	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
+	certPool := x509.NewCertPool()
+	certPool.AppendCertsFromPEM(cert)
 
 	// 2. Create TLS Configuration
 	tlsConfig := &tls.Config{
 		Certificates: []tls.Certificate{clientCert},
-		RootCAs:      caCertPool,
+		RootCAs:      certPool,
 		// Optional: InsecureSkipVerify: true, for development, but not recommended for production
 	}
 
-	// Enable SSL (system CAs), no auth
 	tlsCreds := credentials.NewTLS(tlsConfig)
 	client, err := goldmane.NewFlowsClient(ctx, option.WithoutAuthentication(),
 		option.WithEndpoint(endpoint),
 		option.WithGRPCDialOption(grpc.WithTransportCredentials(tlsCreds)),
 	)
-
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 		defer client.Close()
@@ -61,19 +58,25 @@ func main() {
 	stream, err := client.Stream(ctx, req)
 	if err != nil {
 		log.Fatalf("stream request failed: %v", err)
-	}
 
+	}
+	
+    ec := &ElasticClient{}
+    ec.init()
 	// Read async
 	go func() {
 		for {
-			flow, err := stream.Recv()
+			flowr, err := stream.Recv()
 			if err != nil {
 				log.Printf("stream ended: %v", err)
-				return
+				continue
 			}
-			fmt.Printf("Got flow: %+v\n", flow)
+			fmt.Printf("Got flow: %+v\n", flowr)
+			// Inject flow into Elasticsearch
+			ec.InjectFlow(flowr.Flow)
+			continue
 		}
 	}()
+	select {}
 
-	time.Sleep(10 * time.Second)
 }
