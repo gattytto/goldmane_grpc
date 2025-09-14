@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/elastic/go-elasticsearch/v8"
 	goldmanepb "goldmane.golang.com/tigera/goldmane/v1"
@@ -12,7 +13,11 @@ import (
 )
 
 const ES_HOST = "https://elasticsearch-sample-es-http.elastic-system.svc:9200"
-const ES_INDEX = "goldmane.flows"
+const ES_FLOWS_INDEX = "goldmane.flows"
+const ES_STATS_INDEX = "goldmane.statistics"
+
+var ES_PASS = os.Getenv("ES_PASS")
+var ES_USER = os.Getenv("ES_USER")
 
 type ElasticClient struct {
 	client *elasticsearch.Client
@@ -23,8 +28,8 @@ func (ec *ElasticClient) init() {
 	var err error
 	ec.client, err = elasticsearch.NewClient(elasticsearch.Config{
 		Addresses: []string{ES_HOST},
-		Username:  "elastic",
-		Password:  "REDACTED",
+		Username:  ES_USER,
+		Password:  ES_PASS,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: true,
@@ -35,6 +40,24 @@ func (ec *ElasticClient) init() {
 	if err != nil {
 		log.Fatalf("failed to create Elasticsearch client: %v", err)
 	}
+}
+
+func (ec *ElasticClient) InjectStatistics(stats *goldmanepb.StatisticsResult) {
+	jsonBytes, err := protojson.Marshal(stats)
+	if err != nil {
+		log.Fatalf("failed to marshal stats protobuf: %v", err)
+	}
+
+	resp, _ := ec.client.Index(
+		ES_STATS_INDEX,
+		bytes.NewReader(jsonBytes),
+	)
+
+	if resp.IsError() {
+		log.Fatalf("failed to create Elasticsearch document: %v", resp.Status())
+	}
+
+	//log.Printf("Injected stats into Elasticsearch: %+v\n", string(jsonBytes))
 }
 
 func (ec *ElasticClient) InjectFlow(flow *goldmanepb.Flow) {
@@ -65,14 +88,14 @@ func (ec *ElasticClient) InjectFlow(flow *goldmanepb.Flow) {
 	}
 	// Create Elasticsearch document
 
-	_, err = ec.client.Index(
-		ES_INDEX,
+	resp, _ := ec.client.Index(
+		ES_FLOWS_INDEX,
 		bytes.NewReader(jsonBytes),
 	)
 
-	if err != nil {
-		log.Fatalf("failed to create Elasticsearch document: %v", err)
+	if resp.IsError() {
+		log.Fatalf("failed to create Elasticsearch document: %v", resp.Status())
 	}
-
-	log.Printf("Injected flow into Elasticsearch: %+v\n", string(jsonBytes))
+	//log.Printf("%v", resp)
+	//log.Printf("Injected flow into Elasticsearch: %+v\n", string(jsonBytes))
 }
